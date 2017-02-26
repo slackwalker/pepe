@@ -38,6 +38,6 @@ irc_client.on('join', function(event) {
     // https://twitter.com/realdonaldtrump/status/258584864163500033
     irc_client.say(event.channel, irc_colors.green('(l)-(l)' ) + irc_colors.red('    "My twitter has become so powerful that I can'))
     irc_client.say(event.channel, irc_colors.green('/_____\\') + irc_colors.red('      actually make my enemies tell the truth."'))
-    irc_client.say(event.channel, irc_colors.green('\\_____/') + irc_color.grey('                        -- Donald J. Trump'))
+    irc_client.say(event.channel, irc_colors.green('\\_____/') + irc_colors.grey('                        -- Donald J. Trump'))
   }
 })
