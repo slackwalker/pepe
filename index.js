@@ -58,5 +58,5 @@ function format_tweet(tweet) {
 
   return (
     irc_colors.bold(ident) + ': ' + tweet.full_text + irc_colors.grey(age)
-  ).replace('\n', irc_colors.green('↵'))
+  ).replace(/\n/g, irc_colors.green('↵ '))
 }
