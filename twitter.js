@@ -1,5 +1,4 @@
 var colors = require('colors')
-var irc_colors = require('irc-colors')
 var moment = require('moment')
 var request = require('request-promise')
 var Twitter = require('twitter')
@@ -62,30 +61,14 @@ function format_console(tweet) {
   }
   name += tweet.user.verified ? ' (✓)'.cyan : ''
 
-  return name.bold + ': ' + tweet.full_text + (' -- ' + ago).grey
-}
-
-function format_irc(tweet) {
-  var ago = moment(tweet.created_at, twitter_df).fromNow()
-  var name = irc_colors.blue('@' + tweet.user.screen_name)
-  if (tweet.user.name) {
-    name = tweet.user.name + ' (' + name + ')'
-  }
-  name += tweet.user.verified ? irc_colors.cyan(' (✓)') : ''
-
-  var quoted = ''
-  if (tweet.quoted_status) {
-    quoted = ' [ ' + format_irc(tweet.quoted_status) + ' ]'
-  }
-
-  return irc_colors.bold(name) + ': ' + tweet.full_text + irc_colors.grey(' -- ' + ago) + quoted
+  return (name.bold + ': ' + tweet.full_text + (' -- ' + ago).grey)
 }
 
 exports.handle_message = function (text, cb) {
   var tweet_match = text.match(twitter_re)
   if (tweet_match && tweet_match[4]) {
     get_tweet(tweet_match[4]).then(tweet => {
-      typeof cb === 'function' && cb(format_irc(tweet))
+      typeof cb === 'function' && cb(tweet)
       //console.log(format_console(tweet))
     })
   }

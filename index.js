@@ -1,5 +1,6 @@
 var IRC = require('irc-framework')
 var irc_colors = require('irc-colors')
+var moment = require('moment')
 var twitter = require('./twitter.js')
 
 var config = require('./config.json')
@@ -29,7 +30,10 @@ irc_client.on('message', function(event) {
   }
 
   twitter.handle_message(event.message, resp => {
-    event.reply(resp)
+    event.reply(format_tweet(resp))
+    if (resp.quoted_status) {
+      event.reply('[ ' + format_tweet(resp.quoted_status) + ' ]')
+    }
   })
 })
 
@@ -41,3 +45,18 @@ irc_client.on('join', function(event) {
     irc_client.say(event.channel, irc_colors.green('\\_____/') + irc_colors.grey('                        -- Donald J. Trump'))
   }
 })
+
+function format_tweet(tweet) {
+  var date_format = 'ddd MMM DD HH:mm:ss ZZ YYYY'
+
+  var age = ' -- ' + moment(tweet.created_at, date_format).fromNow()
+  var ident = irc_colors.blue('@' + tweet.user.screen_name)
+  if (tweet.user.name) {
+    ident = tweet.user.name + ' (' + ident + ')'
+  }
+  ident += tweet.user.verified ? irc_colors.cyan(' (✓)') : ''
+
+  return (
+    irc_colors.bold(ident) + ': ' +
+    tweet.full_text + irc_colors.grey(age)).replace('\n', '↵')
+}
