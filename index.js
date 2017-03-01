@@ -1,6 +1,8 @@
 var IRC = require('irc-framework')
 var irc_colors = require('irc-colors')
 var moment = require('moment')
+
+var messages = require('./messages.js')
 var twitter = require('./twitter.js')
 
 var config = require('./config.json')
@@ -26,7 +28,9 @@ irc_client.on('message', function(event) {
   if (event.message.match(/^!part /)) {
     var to_part = event.message.split(' ')[1];
     event.reply('Leaving ' + to_part + '..')
-    irc_client.part(to_part, 'Happy New Year to all, including to my many enemies and those who have fought me and lost so badly they just don\'t know what to do. Love!')
+
+    var message = messages.part_message()
+    irc_client.part(to_part, message)
   }
 
   twitter.handle_message(event.message, resp => {
@@ -39,10 +43,14 @@ irc_client.on('message', function(event) {
 
 irc_client.on('join', function(event) {
   if (event.nick === irc_client.user.nick) {
-    // https://twitter.com/realdonaldtrump/status/258584864163500033
-    irc_client.say(event.channel, irc_colors.green('(l)-(l)' ) + irc_colors.red('    "My twitter has become so powerful that I can'))
-    irc_client.say(event.channel, irc_colors.green('/_____\\') + irc_colors.red('      actually make my enemies tell the truth."'))
-    irc_client.say(event.channel, irc_colors.green('\\_____/') + irc_colors.grey('                        -- Donald J. Trump'))
+    var message = messages.join_message()
+    if (message.constructor === Array) {
+      for (var i = 0, len = message.length; i < len; i++) {
+        irc_client.say(event.channel, message[i])
+      }
+    } else if (typeof message === 'string') {
+      irc_client.say(event.channel, message)
+    }
   }
 })
 
