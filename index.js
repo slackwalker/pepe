@@ -57,6 +57,6 @@ function format_tweet(tweet) {
   ident += tweet.user.verified ? irc_colors.cyan(' (✓)') : ''
 
   return (
-    irc_colors.bold(ident) + ': ' + tweet.full_text + irc_colors.grey(age)
+    irc_colors.bold(ident) + ': ' + tweet.full_text + irc_colors.olive(age)
   ).replace(/\n/g, irc_colors.green('↵ '))
 }
