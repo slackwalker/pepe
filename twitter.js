@@ -1,9 +1,10 @@
 var colors = require('colors')
 var moment = require('moment')
+var nconf = require('nconf')
 var request = require('request-promise')
 var Twitter = require('twitter')
 
-var config = require('./config.json')
+nconf.argv().env().file({ file: './config.json' })
 
 var exports = module.exports = {}
 
@@ -14,8 +15,8 @@ var twitter_df = 'ddd MMM DD HH:mm:ss ZZ YYYY'
 
 async function connect() {
   var bearer_token_credentials = Buffer.from(
-    encodeURIComponent(config.twitter.consumer_key) + ':' +
-    encodeURIComponent(config.twitter.consumer_secret)
+    encodeURIComponent(nconf.get('twitter').consumer_key) + ':' +
+    encodeURIComponent(nconf.get('twitter').consumer_secret)
   ).toString('base64')
 
   var get_bearer_token_options = {
@@ -31,8 +32,8 @@ async function connect() {
   var bearer_token = await request(get_bearer_token_options)
 
   return new Twitter({
-    consumer_key: config.twitter.consumer_key,
-    consumer_secret: config.twitter.consumer_secret,
+    consumer_key: nconf.get('twitter').consumer_key,
+    consumer_secret: nconf.get('twitter').consumer_secret,
     bearer_token: bearer_token.access_token
   })
 }

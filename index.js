@@ -1,22 +1,25 @@
 var IRC = require('irc-framework')
 var irc_colors = require('irc-colors')
 var moment = require('moment')
+var nconf = require('nconf')
 
 var messages = require('./messages.js')
 var twitter = require('./twitter.js')
 
-var config = require('./config.json')
+nconf.argv().env().file({ file: './config.json' })
 
-var irc_client
-
-irc_client = new IRC.Client();
-irc_client.connect({
+nconf.defaults({
+  irc: {
     host: 'irc.deepshell.net',
     port: 6667,
     nick: 'pepe',
     username: 'thefrog',
     gecos: 'Literally Hitler'
-});
+  }
+})
+
+var irc_client = new IRC.Client()
+irc_client.connect(nconf.get('irc'));
 
 irc_client.on('message', function(event) {
   if (event.message.match(/^!join /)) {
