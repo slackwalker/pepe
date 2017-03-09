@@ -19,7 +19,7 @@ async function connect() {
     encodeURIComponent(nconf.get('twitter').consumer_secret)
   ).toString('base64')
 
-  var get_bearer_token_options = {
+  var bearer_token_request_options = {
     uri: 'https://api.twitter.com/oauth2/token',
     method: 'POST',
     body: 'grant_type=client_credentials',
@@ -29,7 +29,7 @@ async function connect() {
     },
     json: true
   }
-  var bearer_token = await request(get_bearer_token_options)
+  var bearer_token = await request(bearer_token_request_options)
 
   return new Twitter({
     consumer_key: nconf.get('twitter').consumer_key,
