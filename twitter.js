@@ -67,8 +67,8 @@ function format_console(tweet) {
 
 exports.handle_message = function (text, cb) {
   var tweet_match = text.match(twitter_re)
-  if (tweet_match && tweet_match[4]) {
-    get_tweet(tweet_match[4]).then(tweet => {
+  if (tweet_match && tweet_match[5]) {
+    get_tweet(tweet_match[5]).then(tweet => {
       typeof cb === 'function' && cb(tweet)
       //console.log(format_console(tweet))
     })
