@@ -10,7 +10,7 @@ var exports = module.exports = {}
 
 var twitter_client
 
-var twitter_re = /http(s)?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/
+var twitter_re = /http(s)?:\/\/(.*\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/
 var twitter_df = 'ddd MMM DD HH:mm:ss ZZ YYYY'
 
 async function connect() {
