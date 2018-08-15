@@ -70,7 +70,7 @@ function format_tweet(tweet) {
   return (
     irc_colors.bold(ident) + ': ' + tweet.full_text + irc_colors.olive(age)
   )
-    .replace(/\n/g, irc_colors.green('↵ '))
+    .replace(/\n/g, ' ' + irc_colors.green('↵') + ' ')
     .replace(/&amp;/g, '&')
     .replace(/&gt;/g, '>')
     .replace(/&lt;/g, '<')
