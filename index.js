@@ -37,9 +37,11 @@ irc_client.on('message', function(event) {
   }
 
   twitter.handle_message(event.message, resp => {
+    event.reply(format_header(resp))
     event.reply(format_tweet(resp))
     if (resp.quoted_status) {
-      event.reply('[ ' + format_tweet(resp.quoted_status) + ' ]')
+      event.reply('| ' + format_header(resp.quoted_status))
+      event.reply('| ' + format_tweet(resp.quoted_status))
     }
   })
 })
@@ -57,7 +59,7 @@ irc_client.on('join', function(event) {
   }
 })
 
-function format_tweet(tweet) {
+function format_header(tweet) {
   var date_format = 'ddd MMM DD HH:mm:ss ZZ YYYY'
 
   var age = ' -- ' + moment(tweet.created_at, date_format).fromNow()
@@ -67,9 +69,11 @@ function format_tweet(tweet) {
   }
   ident += tweet.user.verified ? irc_colors.cyan(' (✓)') : ''
 
-  return (
-    irc_colors.bold(ident) + ': ' + tweet.full_text + irc_colors.olive(age)
-  )
+  return irc_colors.bold(ident) + irc_colors.olive(age) + ':'
+}
+
+function format_tweet(tweet) {
+  return (tweet.full_text)
     .replace(/\n/g, ' ' + irc_colors.green('↵') + ' ')
     .replace(/&amp;/g, '&')
     .replace(/&gt;/g, '>')
